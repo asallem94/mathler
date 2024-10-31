@@ -9,11 +9,11 @@ export function Board() {
   const guesses = game?.guesses || [];
   const remaningRows = MAX_GUESSES - guesses.length - 1;
   const hasActiveRow = guesses.length < MAX_GUESSES;
-  console.log({ guesses });
+  console.log({ activeGuess });
   return (
     <div className="flex flex-col justify-center py-1">
       {guesses.map((guessArg, rowIndex: number) => (
-        <div className="flex justify-center py-1">
+        <div className="flex justify-center py-1" key={`guessed-${rowIndex}`}>
           {guessArg[1].map((guessResult: GuessResultType, index: number) => (
             <Cell
               key={`guessed-${rowIndex}-${index}-${guessArg[0][index]}`}

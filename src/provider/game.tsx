@@ -1,5 +1,11 @@
 import { Game } from "@/utils/game";
-import { createContext, useEffect, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 
 interface GameProviderProps {
   children: React.ReactNode;
@@ -9,7 +15,7 @@ interface GameProviderProps {
 interface GameContextType {
   game: Game | null;
   activeGuess: string;
-  setActiveGuess: any;
+  setActiveGuess: Dispatch<SetStateAction<string>>;
 }
 export const GameContext = createContext<GameContextType>({
   game: null,
@@ -24,8 +30,8 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   useEffect(() => {
     const initMathler = async () => {
       // add logic to save to localstorage to persist game activity
-      const result = await fetch("http://localhost:3000/api/mathler").then(
-        (res) => res.json()
+      const result = await fetch(`${location.origin}/api/mathler`).then((res) =>
+        res.json()
       );
       const game: Game = new Game(result.expression, result.answer);
       setGame(game);

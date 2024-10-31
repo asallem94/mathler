@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type GuessResultType = 0 | 1 | 2; // 0 is incorrect; 1 is correct guess and postion; 2 is correct guess but incorrect position
 export type GuessesResultType = [string, GuessResultType[]][];
 export type GuessType =
@@ -15,7 +16,7 @@ export type GuessType =
   | "-"
   | "*"
   | "/";
-type DeepStringOrStringArray = string | (string | DeepStringOrStringArray)[];
+export type GroupingType = [string, any, any];
 
 export class Game {
   gameResults: null | 1 | 0; // 1 is won and 0 is lost

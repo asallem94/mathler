@@ -3,7 +3,7 @@ import { generateExpression } from "./autoGenerate";
 
 const todaysDate = Math.floor(+new Date() / 1000 / 60 / 60 / 24);
 const obj = Array.from(Array(10000).keys()).reduce(
-  (acc: any, index: number) => {
+  (acc: Record<string, string>, index: number) => {
     let newExpression = generateExpression(6);
     while (Object.values(acc).includes(newExpression)) {
       newExpression = generateExpression(6);

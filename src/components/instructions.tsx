@@ -1,3 +1,4 @@
+import Image from "next/image";
 export function Instructions() {
   return (
     <div className="mx-auto mb-2 bg-[#2D2928] instructions">
@@ -18,7 +19,7 @@ export function Instructions() {
         <li>Orange are in the solution, but in a different place.</li>
         <li>Gray are not in the solution.</li>
       </ul>
-      <img src="example-mathler-row.png" alt="Example Mathler guess row" />
+      <Image src="example-mathler-row.png" alt="Example Mathler guess row" />
       <h3>Additional rules:</h3>
       <ul>
         <li>Numbers and operators can appear multiple times.</li>
@@ -32,7 +33,7 @@ export function Instructions() {
         </li>
       </ul>
       <h3 className="center">An example of a winning game of 83</h3>
-      <img src="winning-mathler.png" alt="Example winning Mathler puzzle" />
+      <Image src="winning-mathler.png" alt="Example winning Mathler puzzle" />
     </div>
   );
 }

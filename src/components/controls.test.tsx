@@ -1,7 +1,6 @@
 import { GameContext, GameProvider } from "@/provider/game";
 import { Controls } from "./controls";
-import { act, fireEvent, render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { act, render, screen } from "@testing-library/react";
 import { useContext } from "react";
 import { Game } from "@/utils/game";
 
@@ -19,7 +18,7 @@ jest.mock("react", () => {
   };
 });
 
-function mockFetch(data: any) {
+function mockFetch(data: { expression: string; answer: string }) {
   return jest.fn().mockImplementation(() =>
     Promise.resolve({
       ok: true,

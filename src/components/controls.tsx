@@ -43,9 +43,9 @@ export function Controls() {
             disabled={game?.gameResults !== null}
             onClick={onPress(label.toString())}
             className={`flex items-center justify-center rounded mx-0.5 font-bold cursor-pointer select-none text-xl ${getBackgroundColor(
-              guessedValues?.[label as unknown as GuessType]
+              guessedValues?.[label as unknown as GuessType] || null
             )}  hover:bg-[#BBC8D6] active:${getBackgroundColor(
-              guessedValues?.[label as unknown as GuessType]
+              guessedValues?.[label as unknown as GuessType] || null
             )} text-black`}
             key={label}
             style={buttonStyle}
@@ -64,13 +64,13 @@ export function Controls() {
               label === "ENTER" || label === "DELETE"
                 ? "bg-[#727F93]"
                 : getBackgroundColor(
-                    guessedValues?.[label as unknown as GuessType]
+                    guessedValues?.[label as unknown as GuessType] || null
                   )
             }  hover:bg-[#BBC8D6] active:${
               label === "ENTER" || label === "DELETE"
                 ? "bg-[#727F93]"
                 : getBackgroundColor(
-                    guessedValues?.[label as unknown as GuessType]
+                    guessedValues?.[label as unknown as GuessType] || null
                   )
             } text-black`}
             style={label.length > 1 ? textButtonStyle : buttonStyle}

@@ -1,6 +1,4 @@
-import { Game } from "./game";
-// jest.mock(Game);
-// jest.mock("./game");
+import { Game, GroupingType } from "./game";
 
 describe("game play functions", () => {
   it("gets grouping from expression", () => {
@@ -12,7 +10,7 @@ describe("game play functions", () => {
     expect(grouping2).toEqual(result2);
   });
   it("gets alternate expression from grouping", () => {
-    const grouping: [string, any, any] = [
+    const grouping: GroupingType = [
       "+",
       ["*", ["/", "4", "2"], "5"],
       ["*", "7", "6"],

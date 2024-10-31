@@ -1,10 +1,8 @@
 import Image from "next/image";
 import localFont from "next/font/local";
-import { Instructions } from "@/components/instructions";
 import { Board } from "@/components/board";
 import { Controls } from "@/components/controls";
-import { useContext, useEffect, useState } from "react";
-import { Game } from "@/utils/game";
+import { useContext } from "react";
 import { GameContext, GameProvider } from "@/provider/game";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
