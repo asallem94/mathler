@@ -5,14 +5,20 @@ interface GameProviderProps {
   children: React.ReactNode;
   game: Game | null;
 }
-export const GameContext = createContext<Game | null>("GameContext");
+
+interface GameContextType {
+  game: Game | null;
+  activeGuess: string;
+  setActiveGuess: any;
+}
+export const GameContext = createContext<GameContextType>({
+  game: null,
+  activeGuess: "",
+  setActiveGuess: () => {},
+});
 
 export const GameProvider = ({ children }: GameProviderProps) => {
-  const [game, setGame] = useState<{
-    game: Game | null;
-    activeGuess: string;
-    setActiveGuess: any;
-  }>();
+  const [game, setGame] = useState<Game | null>(null);
 
   const [activeGuess, setActiveGuess] = useState("");
   useEffect(() => {
@@ -21,7 +27,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
       const result = await fetch("http://localhost:3000/api/mathler").then(
         (res) => res.json()
       );
-      const game = new Game(result.expression, result.answer);
+      const game: Game = new Game(result.expression, result.answer);
       setGame(game);
     };
     initMathler();

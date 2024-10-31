@@ -1,5 +1,5 @@
 export type GuessResultType = 0 | 1 | 2; // 0 is incorrect; 1 is correct guess and postion; 2 is correct guess but incorrect position
-export type GuessesResultType = (string | GuessResultType[])[];
+export type GuessesResultType = [string, GuessResultType[]][];
 export type GuessType =
   | "0"
   | "1"
@@ -15,6 +15,8 @@ export type GuessType =
   | "-"
   | "*"
   | "/";
+type DeepStringOrStringArray = string | (string | DeepStringOrStringArray)[];
+
 export class Game {
   gameResults: null | 1 | 0; // 1 is won and 0 is lost
   guesses: GuessesResultType;
@@ -86,12 +88,13 @@ export class Game {
 
   static getExpressionGrouping(exp: string) {
     function breakExpression(exp: string, operators: string[]): any {
-      if (operators.length === 0) {
-        return exp;
+      if (operators.length === 0 || eval(exp) === exp) {
+        return exp as string;
       }
       const op = operators[0];
       const nextOps = operators.slice(1, operators.length);
-      const splitArray = exp.split(op).reduce((acc, el) => {
+      const splittedArray = exp.split(op);
+      const splitArray = splittedArray.reduce((acc, el): any => {
         return [
           op,
           breakExpression(acc, nextOps),
@@ -106,8 +109,8 @@ export class Game {
     return breakExpression(exp, ["+", "-", "*", "/"]);
   }
 
-  static getExpressionCombinations(groupings: (string | number | any)[]) {
-    function evalExpression(opp: string, a: string, b: string) {
+  static getExpressionCombinations(groupings: [string, any, any]): string[] {
+    function evalExpression(opp: string, a: any, b: any): string[] {
       const isReverseableOpp = opp === "+" || opp === "*";
       if (!isNaN(a) && !isNaN(b)) {
         if (isReverseableOpp) {
@@ -117,44 +120,57 @@ export class Game {
         }
       } else if (!isNaN(a)) {
         if (isReverseableOpp) {
-          return [
-            evalExpression(...b)
-              .map((exp: any) => a + opp + exp)
-              .concat(evalExpression(...b).map((exp: any) => exp + opp + a)),
-          ];
+          return evalDestructuredGrouping(b)
+            .map((exp: string) => a + opp + exp)
+            .concat(
+              evalDestructuredGrouping(b).map((exp: string) => exp + opp + a)
+            );
         } else {
-          return evalExpression(...b).map((exp: any) => a + opp + exp);
+          return evalDestructuredGrouping(b).map(
+            (exp: string) => a + opp + exp
+          );
         }
       } else if (!isNaN(b)) {
         if (isReverseableOpp) {
-          return evalExpression(...a)
-            .map((exp: any) => exp + opp + b)
-            .concat(evalExpression(...a).map((exp: any) => b + opp + exp));
+          return evalDestructuredGrouping(a)
+            .map((exp: string) => exp + opp + b)
+            .concat(
+              evalDestructuredGrouping(a).map((exp: string) => b + opp + exp)
+            );
         } else {
-          return evalExpression(...a).map((exp: any) => exp + opp + b);
+          return evalDestructuredGrouping(a).map(
+            (exp: string) => exp + opp + b
+          );
         }
       } else {
         if (isReverseableOpp) {
-          return evalExpression(...a)
-            .map((exp1: any) =>
-              evalExpression(...b).map((exp2: any) => exp1 + opp + exp2)
+          return evalDestructuredGrouping(a)
+            .map((exp1: string) =>
+              evalDestructuredGrouping(b).map(
+                (exp2: string) => exp1 + opp + exp2
+              )
             )
             .concat(
-              evalExpression(...a).map((exp1: any) =>
-                evalExpression(...b).map((exp2: any) => exp2 + opp + exp1)
+              evalDestructuredGrouping(a).map((exp1: string) =>
+                evalDestructuredGrouping(b).map(
+                  (exp2: string) => exp2 + opp + exp1
+                )
               )
             )
             .flat();
         } else {
-          return evalExpression(...a)
+          return evalDestructuredGrouping(a)
             .map((exp1: any) =>
-              evalExpression(...b).map((exp2: any) => exp1 + opp + exp2)
+              evalDestructuredGrouping(b).map((exp2: any) => exp1 + opp + exp2)
             )
             .flat();
         }
       }
     }
-    return evalExpression(...groupings);
+    function evalDestructuredGrouping(arg: [string, any, any]): string[] {
+      return evalExpression(arg[0], arg[1], arg[2]);
+    }
+    return evalDestructuredGrouping(groupings);
   }
 
   calculateAlternateExpressions() {

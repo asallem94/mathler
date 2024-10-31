@@ -4,12 +4,19 @@ import { Game } from "./game";
 
 describe("game play functions", () => {
   it("gets grouping from expression", () => {
-    const grouping = Game.getExpressionGrouping("4/2*5+3");
-    const result = ["+", ["*", ["/", "4", "2"], "5"], "3"];
-    expect(grouping).toEqual(result);
+    const grouping1 = Game.getExpressionGrouping("4/2*5+3");
+    const result1 = ["+", ["*", ["/", "4", "2"], "5"], "3"];
+    expect(grouping1).toEqual(result1);
+    const result2 = ["+", ["+", "2", "5"], "8"];
+    const grouping2 = Game.getExpressionGrouping("2+5+8");
+    expect(grouping2).toEqual(result2);
   });
   it("gets alternate expression from grouping", () => {
-    const grouping = ["+", ["*", ["/", "4", "2"], "5"], ["*", "7", "6"]];
+    const grouping: [string, any, any] = [
+      "+",
+      ["*", ["/", "4", "2"], "5"],
+      ["*", "7", "6"],
+    ];
     const alternateExpressionResult = Game.getExpressionCombinations(grouping);
     const expectedAlternateExpressions = [
       "4/2*5+7*6",

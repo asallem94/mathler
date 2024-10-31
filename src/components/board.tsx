@@ -1,40 +1,35 @@
 import { GameContext } from "@/provider/game";
-import { getBackgroundColor } from "@/utils/backgroundColor";
-import { GuessesResultType, GuessResultType, GuessType } from "@/utils/game";
+import { GuessResultType, GuessType } from "@/utils/game";
 import { useContext } from "react";
+import { Cell } from "./cell";
 
 export const MAX_GUESSES = 6;
-interface BoardProps {}
-interface CellProps {
-  value?: GuessType;
-  guessResultType?: GuessResultType;
-}
 export function Board() {
   const { game, activeGuess } = useContext(GameContext);
   const guesses = game?.guesses || [];
   const remaningRows = MAX_GUESSES - guesses.length - 1;
   const hasActiveRow = guesses.length < MAX_GUESSES;
+  console.log({ guesses });
   return (
     <div className="flex flex-col justify-center py-1">
-      {guesses.map((guessArg: GuessesResultType, rowIndex) => (
-        <>
-          <div className="flex justify-center py-1">
-            {(guessArg[1] as GuessResultType[]).map(
-              (guessResult: GuessResultType, index: number) => (
-                <Cell
-                  key={`guessed-${rowIndex}-${index}-${guessArg[0][index]}`}
-                  value={guessArg[0][index]}
-                  guessResultType={guessResult}
-                />
-              )
-            )}
-          </div>
-        </>
+      {guesses.map((guessArg, rowIndex: number) => (
+        <div className="flex justify-center py-1">
+          {guessArg[1].map((guessResult: GuessResultType, index: number) => (
+            <Cell
+              key={`guessed-${rowIndex}-${index}-${guessArg[0][index]}`}
+              value={guessArg[0][index] as GuessType}
+              guessResultType={guessResult}
+            />
+          ))}
+        </div>
       ))}
       {hasActiveRow ? (
         <div className="flex justify-center py-1">
-          {activeGuess.split("").map((char, index) => (
-            <Cell key={`active-guess-${index}-${char}`} value={char} />
+          {activeGuess.split("").map((char: string, index: number) => (
+            <Cell
+              key={`active-guess-${index}-${char}`}
+              value={char as GuessType}
+            />
           ))}
           {Array.from(Array(6 - activeGuess.length).keys()).map((_, index) => (
             <Cell key={`active-remaining-${index}`} />
@@ -55,16 +50,4 @@ export function Board() {
       </div>
     </div>
   );
-}
-
-function Cell({ value, guessResultType }: CellProps) {
-  const colorBg = getBackgroundColor(guessResultType);
-  const cell = (
-    <div
-      className={`text-xl w-14 h-10 border-solid border-2 flex items-center justify-center mx-0.5 font-bold rounded font-black ${colorBg} text-white border-${colorBg} absent cell-animation`}
-    >
-      {value}
-    </div>
-  );
-  return cell;
 }
